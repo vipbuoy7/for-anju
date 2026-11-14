@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ten Stops to Anju</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Rubik+Spray+Paint&family=Permanent+Marker&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--BODY-->
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="testbar" id="testbar" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden><p class="toast-line" id="toastLine"></p><p class="toast-sub" id="toastSub"></p></div>
+
+<main id="app">
+  <section id="home" class="view">
+    <header class="hero">
+      <div class="marquee" aria-hidden="true"><span id="homeNum">10</span></div>
+      <p class="eyebrow" id="homeNumLabel">days to go</p>
+      <h1 id="homeTitle">Ten Stops to You</h1>
+      <p class="lede" id="homeSub"></p>
+    </header>
+    <p class="next" id="nextBox" aria-live="polite"></p>
+    <ol class="track" id="track"></ol>
+  </section>
+
+  <section id="chapter" class="view" hidden>
+    <button class="back" id="backBtn" type="button">← All stops</button>
+    <div class="marquee small" aria-hidden="true"><span id="chNum">10</span></div>
+    <p class="eyebrow" id="chEyebrow">Stop 1 of 10</p>
+    <h2 id="chTitle"></h2>
+    <div class="story" id="chStory"></div>
+    <button class="btn go" id="startBtn" type="button">I'm ready</button>
+    <div class="stage" id="stage" hidden></div>
+    <div class="after" id="after" hidden>
+      <p class="after-text" id="afterText"></p>
+      <p class="after-next" id="afterNext"></p>
+      <button class="btn" id="homeBtn" type="button">Back to the track</button>
+    </div>
+  </section>
+
+  <section id="final" class="view" hidden>
+    <button class="back" id="backBtn2" type="button">← All stops</button>
+    <div class="wall" id="wall">
+      <div class="tags" id="tags" aria-hidden="true"></div>
+      <h2 class="bday"><span class="bday-1" id="finalTitle">Happy Birthday</span><span class="bday-name" id="finalName">Anju</span></h2>
+      <figure class="photo" id="finalFig">
+        <img id="finalImg" alt="">
+        <div class="photo-empty">Her photo goes here<br><small>assets/anju.jpg</small></div>
+        <span class="sticker s1" aria-hidden="true">♥</span>
+        <span class="sticker s2" aria-hidden="true">♥</span>
+        <figcaption id="finalCaption"></figcaption>
+      </figure>
+      <div class="diyas" aria-hidden="true">
+        <span class="diya"></span><span class="diya"></span><span class="diya"></span><span class="diya"></span><span class="diya"></span>
+      </div>
+    </div>
+    <button class="btn" id="showerBtn" type="button">Shower more love</button>
+    <div class="story final-story" id="finalStory"></div>
+    <p class="sign" id="finalSign"></p>
+  </section>
+</main>
+<!--/BODY-->
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
