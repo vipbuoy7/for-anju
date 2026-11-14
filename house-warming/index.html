@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>You're Invited! 🏠 Housewarming</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Caveat:wght@600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg1: #ffe8ef;
+    --bg2: #fff6e0;
+    --pink: #ff7aa2;
+    --pink-dark: #e85a85;
+    --roof: #ff8f6b;
+    --wall: #fff3d6;
+    --door: #8a5a44;
+    --ink: #4a3540;
+    --mint: #8fd9c4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Baloo 2", system-ui, sans-serif;
+    color: var(--ink);
+    background: linear-gradient(160deg, var(--bg1), var(--bg2));
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow-x: hidden;
+    padding: 20px;
+  }
+
+  /* floating background bits */
+  .floaty { position: fixed; font-size: 26px; opacity: .35; animation: float 9s ease-in-out infinite; pointer-events: none; }
+  @keyframes float { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-22px) rotate(10deg); } }
+
+  /* ---------- Scene 1: the house ---------- */
+  #houseScene { text-align: center; transition: opacity .5s, transform .5s; }
+  #houseScene.gone { opacity: 0; transform: scale(.9); pointer-events: none; position: absolute; }
+  .hint { font-family: "Caveat", cursive; font-size: 30px; margin-bottom: 18px; }
+  .hint small { display: block; font-size: 20px; opacity: .7; }
+
+  .house { position: relative; width: 240px; margin: 0 auto; animation: bob 2.8s ease-in-out infinite; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .roof {
+    width: 0; height: 0; margin: 0 auto;
+    border-left: 140px solid transparent; border-right: 140px solid transparent;
+    border-bottom: 110px solid var(--roof);
+    position: relative; left: -20px; width: 0;
+    filter: drop-shadow(0 4px 0 rgba(0,0,0,.08));
+  }
+  .chimney { position: absolute; top: 18px; right: 30px; width: 30px; height: 50px; background: #d9705a; border-radius: 4px; }
+  .smoke { position: absolute; top: -10px; right: 34px; font-size: 22px; animation: smoke 3s ease-out infinite; opacity: 0; }
+  .smoke:nth-child(2) { animation-delay: 1s; } .smoke:nth-child(3) { animation-delay: 2s; }
+  @keyframes smoke { 0% { transform: translateY(20px) scale(.6); opacity: 0; } 30% { opacity: .7; } 100% { transform: translateY(-40px) translateX(15px) scale(1.2); opacity: 0; } }
+  .walls {
+    width: 240px; height: 170px; background: var(--wall);
+    border-radius: 0 0 18px 18px; position: relative;
+    box-shadow: inset 0 -10px 0 rgba(0,0,0,.05), 0 10px 25px rgba(232,90,133,.18);
+  }
+  .window {
+    position: absolute; top: 28px; width: 52px; height: 52px; background: #bfe7ff;
+    border: 5px solid #fff; border-radius: 10px; box-shadow: 0 0 0 3px #f2d6a8;
+    display: grid; place-items: center; font-size: 26px;
+  }
+  .window.left { left: 22px; } .window.right { right: 22px; }
+  .doorframe {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 105px; background: #3b2a24; border-radius: 35px 35px 0 0;
+    perspective: 500px; cursor: pointer; overflow: visible;
+  }
+  .doorframe .inside { position: absolute; inset: 0; display: grid; place-items: center; font-size: 34px; border-radius: 35px 35px 0 0; background: #ffd56b; }
+  .door {
+    position: absolute; inset: 0; background: var(--door); border-radius: 35px 35px 0 0;
+    transform-origin: left center; transition: transform 1s cubic-bezier(.6,-0.1,.3,1.3);
+    box-shadow: inset 0 0 0 5px rgba(0,0,0,.12);
+  }
+  .door::after { content: ""; position: absolute; right: 12px; top: 55px; width: 9px; height: 9px; background: gold; border-radius: 50%; }
+  .door.open { transform: rotateY(-105deg); }
+  .doorframe:not(.opened):hover .door { animation: knock .4s ease-in-out 2; }
+  @keyframes knock { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
+  .mat { width: 100px; height: 12px; margin: 0 auto; background: var(--mint); border-radius: 6px; font-size: 9px; line-height: 12px; letter-spacing: 1px; font-weight: 800; color: #fff; }
+  .doorbell { margin-top: 22px; font-size: 15px; opacity: .65; }
+
+  /* ---------- Scene 2: the card ---------- */
+  #card {
+    display: none; width: 100%; max-width: 440px; background: #fff; border-radius: 28px;
+    padding: 34px 28px 28px; text-align: center; position: relative;
+    box-shadow: 0 20px 50px rgba(232,90,133,.25), 0 0 0 6px #fff, 0 0 0 9px var(--pink);
+  }
+  #card.show { display: block; animation: pop .7s cubic-bezier(.2,1.6,.4,1); }
+  @keyframes pop { from { transform: scale(.4) translateY(60px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .tag { display: inline-block; background: var(--mint); color: #fff; font-weight: 800; padding: 4px 14px; border-radius: 99px; font-size: 13px; letter-spacing: 1px; transform: rotate(-3deg); }
+  h1 { font-size: 34px; line-height: 1.05; margin: 12px 0 6px; color: var(--pink-dark); font-weight: 800; }
+  .sub { font-family: "Caveat", cursive; font-size: 24px; margin-bottom: 18px; }
+  .details { background: var(--bg2); border-radius: 18px; padding: 14px 16px; text-align: left; margin-bottom: 16px; }
+  .row { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; font-size: 16px; }
+  .row + .row { border-top: 2px dashed #f2dcc0; }
+  .row .ico { font-size: 20px; width: 26px; text-align: center; }
+  .row b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: .6; }
+  .row a { color: var(--pink-dark); font-weight: 700; }
+
+  .house-rules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; text-align: left; }
+  .house-rules .col { border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; font-size: 15px; }
+  .house-rules b { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .house-rules .on { background: #e3f7f0; }
+  .house-rules .off { background: #ffe8ef; }
+  .house-rules .off span { text-decoration: line-through; text-decoration-color: var(--pink-dark); text-decoration-thickness: 2px; }
+  .fine { font-size: 14px; opacity: .75; margin-bottom: 18px; min-height: 42px; transition: opacity .3s; }
+  .q { font-size: 22px; font-weight: 800; margin-bottom: 12px; }
+  .btns { display: flex; gap: 14px; justify-content: center; align-items: center; min-height: 54px; }
+  button {
+    font-family: inherit; font-size: 18px; font-weight: 800; border: none; cursor: pointer;
+    padding: 12px 26px; border-radius: 99px; transition: transform .15s, background .2s;
+  }
+  #yes { background: var(--pink); color: #fff; box-shadow: 0 6px 0 var(--pink-dark); }
+  #yes:hover { transform: translateY(-2px) scale(1.04); }
+  #yes:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--pink-dark); }
+  #no { background: #eee; color: #888; box-shadow: 0 6px 0 #ccc; transition: left .25s, top .25s, transform .25s; z-index: 50; }
+  #no.runaway { position: fixed; }
+
+  #thanks { display: none; }
+  #thanks.show { display: block; animation: pop .6s cubic-bezier(.2,1.6,.4,1); }
+  #thanks .big { font-size: 60px; }
+  #thanks p { margin: 6px 0 14px; font-size: 17px; }
+  .cal { display: inline-block; text-decoration: none; background: var(--mint); color: #fff; font-weight: 800; padding: 10px 20px; border-radius: 99px; }
+
+  .confetti { position: fixed; top: -40px; font-size: 26px; pointer-events: none; z-index: 100; animation: fall linear forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(120px);
+    background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 99px; font-size: 15px;
+    transition: transform .35s; z-index: 200; white-space: nowrap;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- background doodles -->
+<span class="floaty" style="top:8%;left:8%">🎈</span>
+<span class="floaty" style="top:15%;right:10%;animation-delay:1s">🪴</span>
+<span class="floaty" style="bottom:12%;left:12%;animation-delay:2s">🍕</span>
+<span class="floaty" style="bottom:18%;right:8%;animation-delay:3s">🛋️</span>
+<span class="floaty" style="top:50%;left:3%;animation-delay:4s">🔑</span>
+
+<!-- Scene 1 -->
+<div id="houseScene">
+  <div class="hint">Knock knock! 👀<small>(tap the door)</small></div>
+  <div class="house">
+    <div class="chimney"></div>
+    <span class="smoke">☁️</span><span class="smoke">☁️</span><span class="smoke">☁️</span>
+    <div class="roof"></div>
+    <div class="walls">
+      <div class="window left">🐱</div>
+      <div class="window right">🪴</div>
+      <div class="doorframe" id="doorframe">
+        <div class="inside">🥳</div>
+        <div class="door" id="door"></div>
+      </div>
+    </div>
+    <div class="mat">WELCOME-ISH</div>
+  </div>
+  <div class="doorbell">🔔 doorbell not installed yet, sorry</div>
+</div>
+
+<!-- Scene 2 -->
+<div id="card">
+  <div id="invite">
+    <span class="tag">OFFICIAL GROWN-UP ANNOUNCEMENT</span>
+    <h1>We Have Walls Now! 🏠</h1>
+    <div class="sub">come see them at our housewarming</div>
+
+    <div class="details">
+      <div class="row"><span class="ico">📅</span><div><b>When</b><span id="dWhen"></span></div></div>
+      <div class="row"><span class="ico">⏰</span><div><b>Time</b><span id="dTime"></span></div></div>
+      <div class="row"><span class="ico">📍</span><div><b>Where</b><span id="dWhere"></span></div></div>
+      <div class="row"><span class="ico">👕</span><div><b>Dress code</b>Boys: be slutty 💅<br>Girls: you're pretty anyways, so 🤷‍♀️</div></div>
+    </div>
+
+    <div class="house-rules">
+      <div class="col on">
+        <b>✅ On the house</b>
+        <span>🍕 Food</span><span>🍹 Drinks</span><span>🎶 Music</span><span>📺 Netflix</span>
+      </div>
+      <div class="col off">
+        <b>🚫 Strictly NOT on the house</b>
+        <span>🎁 Gifts</span><span>🫵 You</span>
+      </div>
+    </div>
+
+    <div class="fine" id="fine">Tap here for the fine print 👆</div>
+
+    <div class="q">So... you coming? 🥺</div>
+    <div class="btns">
+      <button id="yes">YES! 🎉</button>
+      <button id="no">No 😒</button>
+    </div>
+  </div>
+
+  <div id="thanks">
+    <div class="big">🥳</div>
+    <h1>Yayyy!</h1>
+    <p>We'll pretend we cleaned. You pretend you're impressed.<br>See you there! 💕</p>
+    <a class="cal" id="calLink" target="_blank" rel="noopener">📅 Add to Google Calendar</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ============ EDIT THESE ============ */
+  const CONFIG = {
+    dateText:  "Sunday, 15 November",
+    timeText:  "7:00 PM onwards (till the snacks run out)",
+    address:   "Flat 301, 3rd Floor",
+    mapsLink:  "https://maps.app.goo.gl/31TWhqRoie3aCZiK6",
+    // for the calendar button (24h, local time)
+    start: "20261115T190000",
+    end:   "20261115T230000",
+  };
+  /* ==================================== */
+
+  const $ = id => document.getElementById(id);
+  $("dWhen").textContent = CONFIG.dateText;
+  $("dTime").textContent = CONFIG.timeText;
+  $("dWhere").innerHTML = `${CONFIG.address}<br><a href="${CONFIG.mapsLink}" target="_blank" rel="noopener">Open in Maps →</a>`;
+  $("calLink").href =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text=" + encodeURIComponent("Housewarming Party 🏠") +
+    "&dates=" + CONFIG.start + "/" + CONFIG.end +
+    "&ctz=Asia/Kolkata" +
+    "&location=" + encodeURIComponent(CONFIG.address) +
+    "&details=" + encodeURIComponent("Flat 301, 3rd Floor. Map: " + CONFIG.mapsLink + "\nFood, drinks, music & Netflix on the house. Gifts not required!");
+
+  function toast(msg) {
+    const t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+
+  function confetti(n = 60) {
+    const bits = ["🎉","🎈","🏠","✨","💖","🍕","🪴","🥳","🔑"];
+    for (let i = 0; i < n; i++) {
+      const s = document.createElement("span");
+      s.className = "confetti";
+      s.textContent = bits[Math.floor(Math.random() * bits.length)];
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.animationDuration = 2.5 + Math.random() * 2.5 + "s";
+      s.style.animationDelay = Math.random() * .8 + "s";
+      document.body.appendChild(s);
+      setTimeout(() => s.remove(), 6000);
+    }
+  }
+
+  /* --- Door --- */
+  let opened = false;
+  $("doorframe").addEventListener("click", () => {
+    if (opened) return;
+    opened = true;
+    $("doorframe").classList.add("opened");
+    $("door").classList.add("open");
+    setTimeout(() => {
+      $("houseScene").classList.add("gone");
+      $("card").classList.add("show");
+      confetti(25);
+    }, 1100);
+  });
+
+  /* --- Fine print (cycles on tap) --- */
+  const finePrint = [
+    "* We have exactly 4 chairs. It's a floor-seating kind of vibe.",
+    "* Please admire the curtains. They took 3 weekends and 1 argument.",
+    "* Wi-Fi password will be shared after you compliment the house.",
+    "* No, we don't know where the light switches are either.",
+    "* Leftovers will be distributed based on how much you helped clean.",
+    "* Housewarming means the house is warm. AC remote is NOT available.",
+  ];
+  let fineIdx = 0;
+  $("fine").addEventListener("click", () => {
+    const f = $("fine");
+    f.style.opacity = 0;
+    setTimeout(() => { f.textContent = finePrint[fineIdx++ % finePrint.length]; f.style.opacity = .75; }, 200);
+  });
+
+  /* --- The NO button that refuses to be pressed --- */
+  const noLines = [
+    "No 😒", "Are you sure? 🤨", "Really sure?? 😢", "There's food 🍕",
+    "We bought chairs for you 🪑", "Think again 🥺", "Wrong button 🙃",
+    "My mom is coming. She'll ask. 👀", "Okay that's just rude 😤",
+  ];
+  let dodges = 0;
+  const no = $("no");
+
+  function runAway(e) {
+    if (e) e.preventDefault();
+    dodges++;
+    no.textContent = noLines[Math.min(dodges, noLines.length - 1)];
+
+    if (dodges >= 9) {
+      // give up and become a yes button
+      no.classList.remove("runaway");
+      no.style.left = no.style.top = "";
+      no.textContent = "Fine. YES 🙄";
+      no.style.background = "var(--pink)"; no.style.color = "#fff"; no.style.boxShadow = "0 6px 0 var(--pink-dark)";
+      no.onclick = sayYes;
+      no.removeEventListener("mouseenter", runAway);
+      no.removeEventListener("touchstart", runAway);
+      toast("The No button has resigned. 🫡");
+      return;
+    }
+
+    const yes = $("yes");
+    yes.style.transform = `scale(${1 + dodges * 0.08})`;
+
+    no.classList.add("runaway");
+    const pad = 20;
+    const w = no.offsetWidth, h = no.offsetHeight;
+    const x = pad + Math.random() * (window.innerWidth - w - pad * 2);
+    const y = pad + Math.random() * (window.innerHeight - h - pad * 2);
+    no.style.left = x + "px";
+    no.style.top = y + "px";
+    no.style.transform = `rotate(${Math.random() * 30 - 15}deg) scale(${Math.max(.6, 1 - dodges * 0.05)})`;
+  }
+  no.addEventListener("mouseenter", runAway);
+  no.addEventListener("touchstart", runAway, { passive: false });
+  no.addEventListener("click", e => { if (dodges < 9) runAway(e); });
+
+  /* --- YES --- */
+  function sayYes() {
+    no.remove();
+    $("invite").style.display = "none";
+    $("thanks").classList.add("show");
+    confetti(90);
+  }
+  $("yes").addEventListener("click", sayYes);
+</script>
+</body>
+</html>
